@@ -13,8 +13,18 @@ def main():
     if len(sys.argv) != 2:
         sys.exit("Usage: python shopping.py data")
 
-    # Load data from spreadsheet and split into train and test sets
+    # Load data from spreadsheet
     evidence, labels = load_data(sys.argv[1])
+    
+    # Validate data ANTES de treinar
+    is_valid, errors = validate_data(evidence, labels)
+    if not is_valid:
+        print("Erros encontrados:")
+        for error in errors[:10]:  # Mostrar apenas primeiros 10
+            print(f"  - {error}")
+        sys.exit(1)
+    
+    # Split into train and test sets
     X_train, X_test, y_train, y_test = train_test_split(
         evidence, labels, test_size=TEST_SIZE
     )
@@ -99,7 +109,6 @@ def load_data(filename):
     return (evidence, labels)
 
 
-
 def train_model(evidence, labels):
     """
     Given a list of evidence lists and a list of labels, return a
@@ -149,6 +158,57 @@ def evaluate(labels, predictions):
     specificity = true_negatives / total_negatives if total_negatives > 0 else 0
     
     return (sensitivity, specificity)
+
+
+def validate_data(evidence, labels):
+    """
+    Valida se os dados carregados estão corretos.
+    
+    Verifica:
+    - Número de features por entrada
+    - Tipos de dados corretos
+    - Labels válidos (0 ou 1)
+    - Sem valores None ou vazios
+    
+    Returns:
+        tuple: (is_valid, error_messages)
+    """
+    errors = []
+    
+    # Verificar se há dados
+    if len(evidence) == 0:
+        errors.append("Nenhum dado foi carregado")
+        return (False, errors)
+    
+    # Verificar número de features
+    expected_features = 17
+    for i, entry in enumerate(evidence):
+        if len(entry) != expected_features:
+            errors.append(f"Entrada {i}: esperadas {expected_features} features, encontradas {len(entry)}")
+            if len(errors) >= 5:  # Limitar mensagens de erro
+                break
+    
+    # Verificar labels
+    valid_labels = {0, 1}
+    for i, label in enumerate(labels):
+        if label not in valid_labels:
+            errors.append(f"Label {i}: valor inválido {label} (deve ser 0 ou 1)")
+            if len(errors) >= 10:
+                break
+    
+    # Verificar valores None
+    for i, entry in enumerate(evidence[:100]):  # Verificar primeiras 100
+        if None in entry:
+            errors.append(f"Entrada {i}: contém valores None")
+    
+    is_valid = len(errors) == 0
+    
+    if is_valid:
+        print(f"✓ Validação: {len(evidence)} entradas válidas com {expected_features} features cada")
+    else:
+        print(f"✗ Validação: encontrados {len(errors)} erros")
+    
+    return (is_valid, errors)
 
 
 if __name__ == "__main__":
