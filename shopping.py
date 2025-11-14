@@ -24,6 +24,8 @@ def main():
             print(f"  - {error}")
         sys.exit(1)
     
+    analyze_dataset(evidence, labels)
+    
     # Split into train and test sets
     X_train, X_test, y_train, y_test = train_test_split(
         evidence, labels, test_size=TEST_SIZE
@@ -210,6 +212,35 @@ def validate_data(evidence, labels):
     
     return (is_valid, errors)
 
+def analyze_dataset(evidence, labels):
+    """
+    Analisa estatísticas básicas do dataset.
+    
+    Mostra:
+    - Total de entradas
+    - Distribuição de labels (compradores vs não-compradores)
+    - Percentagem de cada classe
+    - Balance do dataset
+    """
+    total = len(labels)
+    positives = sum(labels)  # Quantos compraram (label=1)
+    negatives = total - positives  # Quantos não compraram (label=0)
+    
+    print("\n" + "="*50)
+    print("📊 ANÁLISE DO DATASET")
+    print("="*50)
+    print(f"Total de sessões: {total}")
+    print(f"Compradores (label=1): {positives} ({100*positives/total:.1f}%)")
+    print(f"Não-compradores (label=0): {negatives} ({100*negatives/total:.1f}%)")
+    print(f"Rácio: 1:{negatives/positives:.1f}")
+    
+    # Verificar balance
+    if positives / total < 0.3:
+        print("⚠️  Dataset desbalanceado (poucos compradores)")
+    else:
+        print("✓ Dataset razoavelmente balanceado")
+    
+    print("="*50 + "\n")
 
 if __name__ == "__main__":
     main()
