@@ -4,6 +4,30 @@ import sys
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 
+"""
+🛒 Shopping - Sistema de Previsão de Compras Online com IA
+
+Este programa utiliza machine learning (algoritmo K-Nearest Neighbors)
+para prever se um cliente numa loja online irá completar uma compra,
+baseado em 17 características do seu comportamento de navegação.
+
+Features Implementadas:
+    1. load_data() - Carregamento e processamento de dados CSV
+    2. train_model() - Treino com K-Nearest Neighbors (k=1)
+    3. evaluate() - Avaliação com Sensitivity e Specificity
+    4. validate_data() - Validação automática de integridade [IA]
+    5. analyze_dataset() - Análise estatística do dataset [IA]
+
+Dataset: 12.330 sessões reais de utilizadores de e-commerce
+Resultados: Accuracy ~83% | Sensitivity ~41% | Specificity ~91%
+
+Desenvolvido por: Sofia
+Data: Novembro 2025
+Curso: Inteligência Artificial - 3º Ano
+Ferramentas IA: Claude (Anthropic)
+Projeto: CS50's Introduction to Artificial Intelligence with Python
+"""
+
 TEST_SIZE = 0.4
 
 
