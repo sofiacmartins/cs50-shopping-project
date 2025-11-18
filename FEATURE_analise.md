@@ -94,4 +94,4 @@ analyze_dataset(evidence, labels)  # ← Chamada automática
 - **Branch**: feature/analise-estatistica
 - **Ferramenta IA**: Claude (Anthropic)
 - **Linhas de Código**: ~25
-- **Impacto**: Médio-Alto (insights importantes)
+- **Impacto**: Médio-Alto (insights importantes)git 
